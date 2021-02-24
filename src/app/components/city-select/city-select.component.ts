@@ -1,10 +1,11 @@
+import { SelectedCity } from './../../core/types/selected-city';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { TemperatureTypes } from 'src/app/core/types/selected-city';
-import {CityWeather} from 'src/app/core/types/weather.interface';
+import { CityWeather } from 'src/app/core/types/weather.interface';
 import { citiesSelector } from 'src/app/store/selectors/weather.selector';
 import { deleteCityAction, fetchCurrentWeatherAction } from './../../store/actions/weather.action';
 import { AppState } from './../../store/reducers/weather.reducer';
@@ -21,29 +22,30 @@ export class CitySelectComponent {
     cityName: ['', Validators.required],
     temperatureType: [TemperatureTypes.Kelvin]
   })
-
+  selectedCityWeather$ = new BehaviorSubject<CityWeather>(null)
   @Input() index: number
+  @Input() set cityInfo(cityInfo: SelectedCity) {
+    if (!cityInfo) return
+
+    this.cityForm.patchValue({
+      cityName: cityInfo.cityName,
+      temperatureType: cityInfo.units
+    })
+
+    if (cityInfo.weather) {
+      const weather = {
+        ...cityInfo.weather,
+        icon: `http://openweathermap.org/img/wn/${cityInfo.weather.icon}@2x.png`
+      }
+      this.selectedCityWeather$.next(weather)
+    }
+
+
+
+  }
 
   cities$: Observable<string[]> = this.store$.pipe(select(citiesSelector))
-  selectedCityWeather$: Observable<CityWeather> = this.store$.pipe(
-    select(selectedCitiesSelector),
-    map(cities => cities.find((_, i) => i === this.index)),
-    filter(cityInfo => Boolean(cityInfo)),
-    tap(cityInfo => {
-      this.cityForm.patchValue({
-        cityName: cityInfo.cityName,
-        temperatureType: cityInfo.units
-      })
-    }
-    ),
-    map(cityInfo => cityInfo.weather),
-    filter(weather => Boolean(weather)),
-    map(weather => ({
-      ...weather,
-      icon: `http://openweathermap.org/img/wn/${weather.icon}@2x.png`
-    }))
 
-  )
   constructor(
     private fb: FormBuilder,
     private store$: Store<AppState>

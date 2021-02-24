@@ -2,7 +2,7 @@
   Weather Check
 </div>
 <div class="content">
-  <app-city-select [index]="i" *ngFor="let city of selectedCities$ | async; let i = index"></app-city-select>
+  <app-city-select [index]="i" [cityInfo]="city" *ngFor="let city of selectedCities$ | async; let i = index"></app-city-select>
   <app-weather-list></app-weather-list>
 </div>
 
