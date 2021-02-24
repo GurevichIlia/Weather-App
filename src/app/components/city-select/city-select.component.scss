@@ -1,0 +1,53 @@
+:host {
+  form {
+    justify-content: center;
+    display: flex;
+    align-items: end;
+    padding: 10px;
+  }
+
+}
+
+.weather-info {
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+
+
+  img {
+    width: 50px;
+  }
+}
+
+.control-block {
+  padding: 0 30px;
+}
+
+.btns {
+  display: flex;
+
+  button {
+    margin: 5px;
+  }
+}
+
+.hidden {
+  opacity: 0;
+}
+
+@media (max-width: 480px) {
+  form {
+    flex-direction: column;
+
+    .control-block {
+      width: 100%;
+      padding: 0;
+    }
+
+    .btns {
+      width: 100%;
+    }
+  }
+}

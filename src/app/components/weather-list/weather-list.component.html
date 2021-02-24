@@ -1,0 +1,12 @@
+<ng-container *ngIf="(weatherList$ | async) as weatherList">
+  <h2 *ngIf="weatherList.length">Weather in</h2>
+  <div>
+    <ul>
+      <li  *ngFor="let weather of weatherList; let i = index">
+        {{i+1}}. {{weather.cityName}} {{weather.temperature}} {{weather.temperatureType | temperatureSymbol}}
+        {{weather.description}}
+      </li>
+    </ul>
+  </div>
+
+</ng-container>

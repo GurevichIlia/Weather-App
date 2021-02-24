@@ -1,0 +1,36 @@
+<form [formGroup]="cityForm">
+
+  <mat-form-field class="control-block" [appearance]="'outline'">
+    <mat-label>Select City</mat-label>
+    <mat-select formControlName="cityName">
+      <mat-option *ngFor="let city of cities$ | async" [value]="city">
+        {{city}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="cityNameControl.touched && cityNameControl?.errors && cityNameControl?.errors.required">
+      City required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="control-block" [appearance]="'outline'">
+    <mat-label>Units(standart, imperial, etc)</mat-label>
+    <input formControlName="temperatureType"
+      matInput
+      name="units"
+      type="text">
+  </mat-form-field>
+
+  <div class="btns">
+    <button mat-stroked-button color="primary" (click)="addWeather()">+</button>
+    <button mat-stroked-button color="warn" (click)="deleteCity()" [ngClass]="{'hidden': index === 0 }" >-</button>
+  </div>
+
+
+</form>
+
+<div class="weather-info" *ngIf="(selectedCityWeather$ | async) as cityWeather">
+    {{cityWeather.cityName}} {{cityWeather.temperature}} {{cityWeather.temperatureType | temperatureSymbol}}
+     <img [src]="cityWeather.icon" >
+</div>
+
+
